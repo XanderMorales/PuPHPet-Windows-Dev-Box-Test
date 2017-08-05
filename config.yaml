@@ -3,7 +3,7 @@ vagrantfile:
     vm:
         provider:
             local:
-                box: puphpet/ubuntu1604-x64
+                box: puphpet/centos7-x64
                 box_url: puphpet/ubuntu1604-x64
                 box_version: '0'
                 chosen_virtualizer: virtualbox
@@ -19,9 +19,9 @@ vagrantfile:
                         check_guest_tools: 0
                         update_guest_tools: 0
                 machines:
-                    vflm_4idqfndkpwkx:
-                        id: devbox
-                        hostname: mydev.dev
+                    vflm_ref1ctcwroln:
+                        id: Mag2DevBox
+                        hostname: Mag2DevBox
                         network:
                             private_network: 192.168.56.3
                         memory: '2046'
@@ -35,29 +35,7 @@ vagrantfile:
                 options:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
-        synced_folder:
-            vflsf_h6n8nz5knb2t:
-                source: 'c:\\Users\\Xander\PhpstormProjects\\_DEV_FILES\\WEBROOT'
-                target: /var/www
-                sync_type: default
-                smb:
-                    smb_host: ''
-                    smb_username: ''
-                    smb_password: ''
-                    mount_options:
-                        dir_mode: '0775'
-                        file_mode: '0664'
-                rsync:
-                    args:
-                        - '--verbose'
-                        - '--archive'
-                        - '-z'
-                    exclude:
-                        - .vagrant/
-                        - .git/
-                    auto: 'true'
-                owner: www-data
-                group: www-data
+        synced_folder: {  }
         usable_port_range:
             start: 10200
             stop: 10500
@@ -105,11 +83,12 @@ server:
         - siege
         - mc
         - vim
+        - firefox
 users_groups:
     install: '1'
     groups: {  }
     users:
-        - 'developer:www-data'
+        - 'Mag2DevBox:www-data'
 locale:
     install: '1'
     settings:
@@ -121,36 +100,43 @@ locale:
 firewall:
     install: '1'
     rules:
-        fr_2y89bc9wcxba:
+        fr_yq5u6hnigqjh:
             port:
                 - '9000'
             priority: '900'
             proto: tcp
             action: accept
-        fr_ay7enkflrq2c:
+        fr_9cbjncc7vtt0:
             port:
                 - '3306'
             priority: '306'
             proto: tcp
             action: accept
-        fr_2j77ain4bnjr:
+        fr_y33v76i414rc:
             port:
                 - '8080'
             priority: '880'
             proto: tcp
             action: accept
-        fr_e5ui005p9spc:
+        fr_4lips2ygzosp:
             port:
                 - '5432'
             priority: '432'
             proto: tcp
             action: accept
-        fr_o50oda8d6jb7:
+        fr_rx7egmwa4xjf:
             port:
                 - '8025'
             priority: '805'
             proto: tcp
             action: accept
+resolv:
+    install: '1'
+    nameservers:
+        - 8.8.8.8
+        - 8.8.4.4
+    domainname: ''
+    searchpath: {  }
 cron:
     install: '1'
     jobs: {  }
@@ -167,7 +153,7 @@ nginx:
         names_hash_bucket_size: 128
     upstreams: {  }
     vhosts:
-        nxv_orqq3he8lkpe:
+        nxv_n2vcny96uans:
             server_name: awesome.dev
             server_aliases:
                 - www.awesome.dev
@@ -175,17 +161,12 @@ nginx:
             listen_port: '80'
             client_max_body_size: 1m
             ssl: '0'
-            ssl_cert: ''
-            ssl_key: ''
-            ssl_port: '443'
-            ssl_protocols: ''
-            ssl_ciphers: ''
-            rewrite_to_https: '1'
-            spdy: '1'
             locations:
-                nxvl_b2b4sl1pwhcq:
+                nxvl_3hxu1nthr6n7:
                     www_root: ''
                     location: /
+                    autoindex: 'off'
+                    internal: 'false'
                     index_files:
                         - index.html
                         - index.htm
@@ -199,9 +180,11 @@ nginx:
                     fastcgi_split_path: ''
                     proxy: ''
                     proxy_redirect: ''
-                nxvl_4x12zl7o65h9:
+                nxvl_52u8h83zhhdh:
                     www_root: ''
                     location: '~ \.php$'
+                    autoindex: 'off'
+                    internal: 'false'
                     try_files:
                         - $uri
                         - $uri/
@@ -236,23 +219,23 @@ apache:
         - rewrite
         - vhost_alias
     vhosts:
-        av_294xilhakfa9:
-            servername: magento2.dev
-            docroot: /var/www/magento2.dev/
+        av_jgl00kd4plza:
+            servername: Mag2DevBox
+            docroot: /var/www/Mag2DevBox/
             port: '80'
             setenvif:
                 - 'Authorization "(.*)" HTTP_AUTHORIZATION=$1'
             custom_fragment: ''
             ssl: '0'
-            ssl_cert: ''
-            ssl_key: ''
-            ssl_chain: ''
-            ssl_certs_dir: ''
+            ssl_cert: LETSENCRYPT
+            ssl_key: LETSENCRYPT
+            ssl_chain: LETSENCRYPT
+            ssl_certs_dir: LETSENCRYPT
             ssl_protocol: ''
             ssl_cipher: ''
             directories:
-                avd_xp8jw2w3z2e8:
-                    path: /var/www/magento2.dev/
+                avd_2bo9tn2bz4fi:
+                    path: /var/www/Mag2DevBox/
                     directoryindex: ''
                     options:
                         - Indexes
@@ -265,7 +248,7 @@ apache:
                     custom_fragment: ''
                     provider: directory
             files_match:
-                avfm_g978ouvbqxdg:
+                avfm_cstqtx9jka0z:
                     path: \.php$
                     sethandler: 'proxy:fcgi://127.0.0.1:9000'
                     custom_fragment: ''
@@ -274,6 +257,7 @@ letsencrypt:
     install: '1'
     settings:
         email: ''
+        webserver_service: ''
     domains: {  }
 php:
     install: '1'
@@ -326,7 +310,7 @@ php:
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
-        phpfp_rzzydggasx5l:
+        phpfp_4y03jdxs8ta6:
             ini:
                 prefix: www
                 listen: '127.0.0.1:9000'
@@ -371,7 +355,7 @@ drush:
 ruby:
     install: '1'
     versions:
-        rv_dqkwf1dxeu7s:
+        rv_svcmm1irxgq3:
             default: '1'
             bundler: '1'
             version: 2.3.1
@@ -403,61 +387,46 @@ nodejs:
         - bower
         - yo
         - cofee-script
-hhvm:
-    install: '0'
-    composer: '1'
-    composer_home: ''
-    settings: {  }
-    server_ini:
-        hhvm.server.host: 127.0.0.1
-        hhvm.server.port: '9000'
-        hhvm.log.use_log_file: '1'
-        hhvm.log.file: /var/log/hhvm/error.log
-    php_ini:
-        display_errors: 'On'
-        error_reporting: '-1'
-        date.timezone: UTC
 mariadb:
-    install: '0'
+    install: '1'
     settings:
-        version: '10.1'
-        root_password: '123'
+        version: '10.2'
+        root_password: Mag2DevBox
         override_options: {  }
-    adminer: '1'
     users:
-        mariadbnu_31qyd80x6yde:
-            name: monkee
-            password: monkee
+        mariadbnu_gjbn0144uoj6:
+            name: Mag2DevBox
+            password: Mag2DevBox
     databases:
-        mariadbnd_jkb4a3vcdsgk:
-            name: magento2
+        mariadbnd_1vjtp2kfzxro:
+            name: Mag2DevBox
             sql: ''
-        mariadbnd_9h779a5kr846:
+        mariadbnd_gti2m57s1agq:
             name: magento2
             sql: ''
     grants:
-        mariadbng_tkk1fhqwxviz:
-            user: monkee
+        mariadbng_7zguq48p3jsn:
+            user: Mag2DevBox
             table: '*.*'
             privileges:
                 - ALL
+                - 'GRANT OPTION'
 mysql:
-    install: '1'
+    install: '0'
     settings:
         version: '5.7'
         root_password: monkee
         override_options: {  }
-    adminer: 0
     users:
-        mysqlnu_zzw9wopijbmj:
+        mysqlnu_nkt83rdst3hm:
             name: monkee
             password: monkee
     databases:
-        mysqlnd_mhiq3qely9cu:
+        mysqlnd_wxkj6iaggofj:
             name: magento2
             sql: ''
     grants:
-        mysqlng_fzmgy8kgk64c:
+        mysqlng_ypm97hxlc6y1:
             user: monkee
             table: '*.*'
             privileges:
@@ -473,7 +442,6 @@ postgresql:
     databases: {  }
     users: {  }
     grants: {  }
-    adminer: 0
 mongodb:
     install: '0'
     settings:
@@ -488,7 +456,6 @@ redis:
         port: '6379'
 sqlite:
     install: '0'
-    adminer: 0
     databases: {  }
 mailhog:
     install: '0'
@@ -522,7 +489,7 @@ elastic_search:
         version: 2.3.1
         java_install: true
     instances:
-        esi_j9rd69d0b1n1:
+        esi_cyntioy4q962:
             name: es-01
 solr:
     install: '0'
